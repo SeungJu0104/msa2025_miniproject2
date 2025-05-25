@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.minisecond.project.board.BoardDAO"><!-- namespace 별칭 써 줄임말 만들기 -->
+	<sql id="search">
+		UPPER(P.DELETEYN) = 'N' AND UPPER(M.DELETEYN) = 'N' AND BT.BOARDNAME = #{board}
+		<if test="searchValue != null and searchValue != ''">
+			AND content LIKE concat(concat('%', #{searchValue}), '%')
+		</if>
+	</sql>
+	
+	<sql id="field1">
+		P.POSTNO, BT.BOARDNAME, M.ID, P.TITLE, P.CONTENT, P.VIEWS, P.CREATEDAT
+	</sql>
+	
+	<sql id="field2">
+		POSTNO = #{postNo}
+	</sql>
+	
+	<sql id="join">
+		TB_POST P
+			JOIN 
+			    TB_BOARDTYPE BT ON P.BOARDNO = BT.BOARDNO
+			JOIN 
+			    TB_MEMBER M ON P.MEMBERNO = M.MEMBERNO
+	</sql>
+	
+	<select id="getBoard" resultType="org.minisecond.project.board.BoardVO">
+		SELECT *
+		FROM
+			(SELECT ROWNUM RNUM, B.*
+			FROM
+				(SELECT 
+					<include refid="field1"/>
+				FROM 
+					<include refid="join"/>
+				WHERE 
+				     <include refid="search"/>
+				ORDER BY CREATEDAT DESC
+			) B
+			WHERE ROWNUM BETWEEN 1 AND #{end}) POST
+		WHERE RNUM BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM 
+			<include refid="join"/>
+		WHERE 
+		     <include refid="search"/>
+	</select>
+	
+	<select id="getPost" resultType="org.minisecond.project.board.BoardVO">
+		SELECT 
+			<include refid="field1"/>
+		FROM
+			<include refid="join"/>
+		WHERE
+			<include refid="search"/> AND <include refid="field2"/>
+	</select>
+	
+	<select id="getPassword" resultType="String">
+		SELECT
+			PASSWORD
+		FROM
+			TB_POST
+		WHERE
+			POSTNO = #{postNo}
+	</select>
+	
+	<update id="addViewCnt">
+		UPDATE
+			TB_POST
+		SET
+			VIEWS = VIEWS + 1
+		WHERE
+			<include refid="field2"/>
+	</update>
+	
+	<update id="updatePost">
+		UPDATE
+			TB_POST
+		SET
+			TITLE = #{title}, CONTENT = #{content}
+		WHERE
+			<include refid="field2"/>
+	</update>
+	
+	<update id="deletePost">
+		UPDATE
+			TB_POST
+		SET
+			DELETEYN = 'Y', DELETEDAT = SYSDATE
+		WHERE
+			<include refid="field2"/> AND PASSWORD = #{password}
+	</update>
+	
+	<insert id="registerPost">
+		INSERT INTO
+			TB_POST(
+				POSTNO, 
+				TITLE, 
+				BOARDNO, 
+				CONTENT, 
+				MEMBERNO,
+				PASSWORD, 
+				CREATEDAT,
+				DELETEYN,
+				VIEWS
+			)
+		VALUES(
+			SEQ_POST.NEXTVAL, 
+			#{title}, 
+			(SELECT BOARDNO FROM TB_BOARDTYPE WHERE BOARDNAME = #{boardName}), 
+			#{content}, 
+			(SELECT MEMBERNO FROM TB_MEMBER WHERE ID = #{id}),
+			#{password}, 
+			SYSDATE,
+			'N',
+			0
+			)
+	</insert>
+</mapper>
+

@@ -4,7 +4,7 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.kosa.mini.member.MemberDAO"><!-- namespace 별칭 써 줄임말 만들기 -->
+<mapper namespace="org.minisecond.project.member.MemberDAO"><!-- namespace 별칭 써 줄임말 만들기 -->
 	<sql id="search">
 		<if test="searchValue != null and searchValue != ''">
 			AND ID LIKE concat(concat('%', #{searchValue}), '%')
@@ -20,7 +20,7 @@
 			</otherwise>			
 		</choose>
 	</sql>
-	<select id="login" resultType="org.kosa.mini.member.MemberVO">
+	<select id="login" resultType="org.minisecond.project.member.MemberVO">
 		SELECT 
 			ID, PASSWORD, LOCKYN, LOGINFAILURE, BOARDAUTH
 		FROM 
@@ -28,7 +28,7 @@
 		WHERE 
 			ID = #{id} AND DELETEYN = 'N'
 	</select>
-	<select id="getMemberList" resultType="org.kosa.mini.member.MemberVO">
+	<select id="getMemberList" resultType="org.minisecond.project.member.MemberVO">
 		SELECT *	
 		FROM(SELECT ROWNUM RNUM , M.*
 			FROM
@@ -77,7 +77,7 @@
 			DELETEYN = 'N'
 			<include refid="search"/>
 	</select>
-	<select id="getMember" resultType="org.kosa.mini.member.MemberVO">
+	<select id="getMember" resultType="org.minisecond.project.member.MemberVO">
 		SELECT
 			<include refid = "field1"/>
 		FROM
@@ -106,7 +106,7 @@
 			#{birthDate}
 		)
 	</insert>
-	<select id="getInfo" resultType="org.kosa.mini.member.MemberVO">
+	<select id="getInfo" resultType="org.minisecond.project.member.MemberVO">
 		SELECT 
 			MEMBERNO, ID, PASSWORD, NAME, PHONENUMBER, POSTCODE, ADDRESS, DETAILADDRESS, CREATEDAT
 		FROM

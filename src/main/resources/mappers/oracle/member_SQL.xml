@@ -20,7 +20,7 @@
 			</otherwise>			
 		</choose>
 	</sql>
-	<select id="login" resultType="org.minisecond.project.member.MemberVO">
+	<select id="login" resultType="org.minisecond.project.member.LoginForm">
 		SELECT 
 			ID, PASSWORD, LOCKYN, LOGINFAILURE, BOARDAUTH
 		FROM 

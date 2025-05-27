@@ -15,7 +15,7 @@ public class MemberService {
 	
 	private final MemberDAO mDao;
 	
-	public MemberVO login(MemberVO member) {
+	public LoginForm login(LoginForm member) {
 		return mDao.login(member);
 	}
 	

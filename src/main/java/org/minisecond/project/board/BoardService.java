@@ -13,11 +13,11 @@ public class BoardService {
 	
 	private final BoardDAO bd;
 
-	public PageResponseVO<BoardVO> getBoard(Integer pageSize) {
-		
-		List<BoardVO> res = bd.getBoard();
-		
-		return new PageResponseVO<BoardVO>(pageSize);
-	}
+//	public PageResponseVO<BoardVO> getBoard(Integer pageSize) {
+//		
+//		List<BoardVO> res = bd.getBoard();
+//		
+//		return new PageResponseVO<BoardVO>(pageSize);
+//	}
 
 }

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface MemberDAO {
 	
-	public MemberVO login(MemberVO member);
+	public LoginForm login(LoginForm member);
 	public int updateFailure(MemberVO dbMember);
 	public int updateLockYn(MemberVO dbMember);
 	public List<MemberVO> getMemberList(Map<String, Object> map);

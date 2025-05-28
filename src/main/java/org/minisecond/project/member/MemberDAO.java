@@ -14,8 +14,8 @@ public interface MemberDAO {
 	public int updateLockYn(MemberVO dbMember);
 	public List<MemberVO> getMemberList(Map<String, Object> map);
 	public int getTotalCount(Map<String, Object> map);
-	public int lockYn(@Param("memberNo") String memberNo, @Param("lockYn") char lockYn);
-	public MemberVO getMember(MemberVO member);
+	public int lockYn(@Param("memberNo") int memberNo, @Param("lockYn") char lockYn);
+	public MemberVO getMember(String id);
 	public int register(MemberVO member);
 	public MemberVO getInfo(@Param("id") String id);
 	public int updateMember(MemberVO member);

@@ -18,6 +18,16 @@ public class Util {
 		return map;
 	}
 	
+	public static Map<String, Object> putMsgObj(String key, String message, Map<String, Object> map) {
+		map.put(key, message);
+		return map;
+	}
+	
+	public static Map<String, Object> putMap(String key, Object object, Map<String, Object> map) {
+		map.put(key, object);
+		return map;
+	}
+	
 	public static int parseInt(String str, int defaultValue) {
 		try {
 			if (str != null && str.length() != 0) {

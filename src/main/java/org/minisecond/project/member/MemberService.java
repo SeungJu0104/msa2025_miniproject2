@@ -30,7 +30,7 @@ public class MemberService {
 	}
 	
 	@Transactional
-	public int lockYn(String memberNo, String lockYn) {
+	public int lockYn(int memberNo, String lockYn) {
 		return mDao.lockYn(memberNo, lockYn.charAt(0));
 	}
 
@@ -42,8 +42,8 @@ public class MemberService {
 		return new PageResponseVO<MemberVO>(pageNo, mDao.getMemberList(map), mDao.getTotalCount(map), size, parserPage);
 	}
 
-	public MemberVO getMember(MemberVO member) {
-		return mDao.getMember(member);
+	public MemberVO getMember(String id) {
+		return mDao.getMember(id);
 	}
 	
 	@Transactional

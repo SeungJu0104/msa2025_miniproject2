@@ -4,13 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.minisecond.project.util.CustomException;
+import org.minisecond.project.util.GetPageVO;
 import org.minisecond.project.util.Util;
 import org.minisecond.project.util.Validate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,14 +60,61 @@ public class MemberController {
 	}
 	
 	@PostMapping("/memberList")
-	public ResponseEntity<Map<String, Object>> getMemberList(@RequestBody String searchValue, String pageNo, String size){
-		
+	public ResponseEntity<Map<String, Object>> getMemberList(@RequestBody GetPageVO page){
+
 		Map<String, Object> map = Util.createMap();
 
-		map.put("pageResponse", ms.getMemberList(searchValue, Util.parseInt(pageNo, pageNoDefaultVal), Util.parseInt(size, sizeDefaultVal), parserDefaultVal));
-		map.put("status", "success");
-		return ResponseEntity.ok().body(map);
+		Util.putMap("pageResponse", 
+				ms.getMemberList(page.getSearchValue(), Util.parseInt(page.getPageNo(), pageNoDefaultVal), 
+				Util.parseInt(page.getSize(), sizeDefaultVal), parserDefaultVal), map);
+
+		return ResponseEntity.ok().body(Util.putMsgObj("status", "success", map));
 		
+	}
+	
+	@PostMapping("/memberDatil/{id}")
+	public ResponseEntity<Map<String, Object>> getMember(@PathVariable("id") String id){
+		
+		Map<String, Object> map = Util.createMap();
+		
+		if(id == null || id.isBlank()) throw new IllegalArgumentException("잘못된 접근입니다.");
+		
+		MemberVO dbMember = ms.getMember(id);
+		
+		if(dbMember == null) throw new IllegalArgumentException("다시 시도해주세요.");
+		
+		Util.putMap("item", dbMember, map);
+		return ResponseEntity.ok().body(Util.putMsgObj("status", "success", map));
+		
+	}
+	
+	@PutMapping("/lockYn")
+	public ResponseEntity<Map<String, Object>> lockYn(@RequestBody MemberVO member) throws CustomException{
+		
+		Map<String, Object> map = Util.createMap();
+		
+		if(member.getMemberNo() <= 0) throw new IllegalArgumentException("잘못된 접근입니다.");
+		
+		if(ms.lockYn(member.getMemberNo(), member.getLockYn()) != 1)  throw new CustomException("다시 시도해주세요.");
+		
+		return ResponseEntity.ok().body(Util.putMsgObj("status", "success", map));
+	}
+	
+	@PostMapping("/search")
+	public ResponseEntity<Map<String, Object>> search(@RequestBody GetPageVO page) {
+		
+		Map<String, Object> map = Util.createMap();
+		
+		Util.putMap(
+				"pageResponse", 
+				ms.getMemberList(
+						page.getSearchValue(), 
+						Util.parseInt(page.getPageNo(), pageNoDefaultVal), 
+						Util.parseInt(page.getSize(), pageNoDefaultVal), 
+						parserDefaultVal)
+				, map);
+		
+		return ResponseEntity.ok().body(Util.putMsgObj("status", "success", map));
 	}
 
 }

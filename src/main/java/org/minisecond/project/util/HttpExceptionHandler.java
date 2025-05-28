@@ -1,9 +1,8 @@
-package org.minisecond.project;
+package org.minisecond.project.util;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.minisecond.project.util.Util;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +27,10 @@ public class HttpExceptionHandler {
 
         return ResponseEntity.badRequest().body(Util.putMsg("msg", errorMessage, map));
     }
-	
-
+    
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<Map<String, Object>> customError(CustomException ex) {
+    	Map<String, Object> map = Util.createMap();
+    	return ResponseEntity.badRequest().body(Util.putMsgObj("msg", ex.getMessage(), map));
+    }
 }

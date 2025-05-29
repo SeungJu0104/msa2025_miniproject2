@@ -26,8 +26,6 @@ public class BoardController {
 	@GetMapping("/getBoard/{league}")
 	public Map<String, Object> getBoard(@PathVariable("league") String league){
 		
-		Map<String, Object> map = Util.createMap();
-		
 //		if(league )
 		
 		// 데이터베이스에서 자료 가져오기
@@ -37,14 +35,15 @@ public class BoardController {
 		
 		
 		// map에 담기
-		map.put("status", "ok");
+//		map.put("status", "ok");
 //		map.put("pageResponse", res);
 		
 		
 		
 		
 		// 화면에 리턴
-		return map;
+//		return map;
+		return null;
 	}
 
 }

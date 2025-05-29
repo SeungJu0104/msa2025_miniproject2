@@ -10,15 +10,15 @@ import org.apache.ibatis.annotations.Param;
 public interface MemberDAO {
 	
 	public LoginForm login(LoginForm member);
-	public int updateFailure(MemberVO dbMember);
-	public int updateLockYn(MemberVO dbMember);
+	public int updateFailure(LoginForm dbMember);
+	public int updateLockYn(LoginForm dbMember);
 	public List<MemberVO> getMemberList(Map<String, Object> map);
 	public int getTotalCount(Map<String, Object> map);
 	public int lockYn(@Param("memberNo") int memberNo, @Param("lockYn") char lockYn);
 	public MemberVO getMember(String id);
 	public int register(MemberVO member);
 	public MemberVO getInfo(@Param("id") String id);
-	public int updateMember(MemberVO member);
-	public int deleteMember(MemberVO member);
+	public int updateMember(UpdateForm member);
+	public int deleteMember(String id);
 
 }

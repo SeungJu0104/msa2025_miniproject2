@@ -1,5 +1,6 @@
 package org.minisecond.project.util;
 
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,12 @@ public class HttpExceptionHandler {
 
         return ResponseEntity.badRequest().body(Util.putMsg("msg", errorMessage, map));
     }
+    
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<Map<String, String>> DBException(SQLException e){
+		Map<String, String> map = Util.createMapString();
+		return ResponseEntity.badRequest().body(Util.putMsg("msg", e.getMessage(), map));
+	}
     
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<Map<String, Object>> customError(CustomException ex) {

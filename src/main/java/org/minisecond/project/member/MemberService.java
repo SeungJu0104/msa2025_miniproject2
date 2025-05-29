@@ -20,12 +20,12 @@ public class MemberService {
 	}
 	
 	@Transactional
-	public int updateFailure(MemberVO dbMember) {
+	public int updateFailure(LoginForm dbMember) {
 		return mDao.updateFailure(dbMember);
 	}
 	
 	@Transactional
-	public int updateLockYn(MemberVO dbMember) {
+	public int updateLockYn(LoginForm dbMember) {
 		return mDao.updateLockYn(dbMember);
 	}
 	
@@ -56,13 +56,13 @@ public class MemberService {
 	}
 	
 	@Transactional
-	public int updateMember(MemberVO member) {
+	public int updateMember(UpdateForm member) {
 		return mDao.updateMember(member);
 	}
 	
 	@Transactional
-	public int deleteMember(MemberVO member) {
-		return mDao.deleteMember(member);
+	public int deleteMember(String id) {
+		return mDao.deleteMember(id);
 	}
 	
 

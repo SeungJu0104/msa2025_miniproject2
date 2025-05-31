@@ -47,7 +47,7 @@ public class MemberService {
 	}
 	
 	@Transactional
-	public int register(MemberVO member) {
+	public int register(RegisterForm member) {
 		return mDao.register(member);
 	}
 
@@ -63,6 +63,10 @@ public class MemberService {
 	@Transactional
 	public int deleteMember(String id) {
 		return mDao.deleteMember(id);
+	}
+
+	public String getId(String id) {
+		return mDao.getId(id);
 	}
 	
 

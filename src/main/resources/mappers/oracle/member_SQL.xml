@@ -130,5 +130,13 @@
 		WHERE
 			ID = #{id}
 	</update>
+	<select id="getId" resultType="String">
+		SELECT
+			ID
+		FROM
+			TB_MEMBER
+		WHERE
+			ID = #{ID} AND DELETEYN = 'N'
+	</select>
 </mapper>
 

@@ -36,31 +36,31 @@ public class MemberController {
 
 		// 입력받은 아이디, 비밀번호 빈 값 검증은 HttpExceptionHandler에서 수행(BindingResult도 명시할 필요 없다.)
 		if(!Validate.isValid(Validate.IDREGEX, member.getId())) throw new IllegalArgumentException(Validate.IDREGEXERRMSG);
-		
+
 		if(!Validate.isValid(Validate.PWREGEX, member.getPassword())) throw new IllegalArgumentException(Validate.PWREGEXERRMSG);
 
 		LoginForm inner = ms.login(member);
-		
+
 		if(inner == null || inner.getId().isBlank()) {
 			throw new IllegalArgumentException(Validate.IDPWEMPTYERRMSG);
 		}
-		
+
 		if(inner.getLoginFailure() == 5 && "N".equals(inner.getLockYn())) {
 			
 			if(ms.updateLockYn(inner) == 1) throw new CustomException(Validate.LOGINCNTERRMSG);
 			else throw new IllegalStateException("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
 		
 		}
-		
+
 		if(inner.getLoginFailure() == 5 || "Y".equals(inner.getLockYn()))	{
 			throw new CustomException(Validate.LOGINCNTERRMSG);
 		}
-		
+
 		if(inner.getPassword().isBlank() || !inner.getPassword().equals(member.getPassword())) { // 아이디는 일치하나 비밀번호가 불일치할 경우 로그인 실패 횟수를 1 증가시킨다.
 			if(ms.updateFailure(inner) == 1) throw new IllegalArgumentException(Validate.IDPWEMPTYERRMSG);
 			else throw new CustomException(Validate.LOGINCNTERRMSG);
 		}
-		
+
 		return ResponseEntity.ok(
 				Map.of(
 				"userId", inner.getId(),
@@ -71,7 +71,7 @@ public class MemberController {
 		
 	}
 	
-	@PostMapping("/memberList")
+	@PostMapping("/list")
 	public ResponseEntity<Map<String, Object>> getMemberList(@RequestBody GetPageVO page){
 
 		Map<String, Object> map = Map.of(
@@ -88,7 +88,7 @@ public class MemberController {
 		
 	}
 	
-	@GetMapping("/memberDetail/{id}")
+	@GetMapping("/detail/{id}")
 	public ResponseEntity<Map<String, Object>> getMember(@PathVariable("id") String id){
 		
 		if(id == null || id.isBlank()) throw new IllegalArgumentException("잘못된 접근입니다.");
@@ -126,7 +126,7 @@ public class MemberController {
 		return ResponseEntity.ok().body(map);
 	}
 	
-	@PutMapping("/memberUpdate")
+	@PutMapping("/update")
 	public ResponseEntity<Void> updateMember(@RequestBody @Valid UpdateForm member) {
 		
 	    if (!Validate.isValid(Validate.PWREGEX, member.getPassword())) throw new IllegalArgumentException(Validate.PWREGEXERRMSG);
@@ -138,30 +138,30 @@ public class MemberController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@DeleteMapping("/memberDelete/{id}")
-	public ResponseEntity<Void> deleteMember(@PathVariable("id") String id) {
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Map<String, String>> deleteMember(@PathVariable("id") String id) {
 		
 		if(id == null || id.isBlank()) throw new IllegalArgumentException("잘못된 접근입니다.");
 		
 		if(ms.deleteMember(id) != 1) throw new IllegalStateException("회원 탈퇴 중 오류가 발생했습니다. 다시 시도해주세요.");
 		
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(Map.of("msg", "그동안 이용해주셔서 감사했습니다."));
 	}
 	
-	@PostMapping("/memberRegister")
+	@PostMapping("/register")
 	public ResponseEntity<Void> registerMember(@RequestBody @Valid RegisterForm member) {
 		log.info(member.toString());
-		log.info("a");
+
 		if(!Validate.isValid(Validate.IDREGEX, member.getId())) throw new IllegalArgumentException(Validate.IDREGEXERRMSG);
-		log.info("b");
+
 	    if (!Validate.isValid(Validate.PWREGEX, member.getPassword())) throw new IllegalArgumentException(Validate.PWREGEXERRMSG);
-	    log.info("c");
+
 	    if(!Validate.isValid(Validate.PHONEREGEX, member.getPhoneNumber())) throw new IllegalArgumentException(Validate.PHONEREGEXERRMSG);
-	    log.info("d");
+
 	    if(!Validate.isValidBirthDate(member.getBirthDate())) throw new IllegalArgumentException(Validate.BIRTHDATEERRMSG);
-	    log.info("e");
+
 	    if(ms.register(member) != 1) throw new IllegalStateException("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
-	    log.info("f");
+
 		return ResponseEntity.ok().build();
 	}
 	

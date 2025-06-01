@@ -8,6 +8,7 @@ import org.minisecond.project.util.PageResponseVO;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -25,8 +26,8 @@ public class BoardService {
 		return new PageResponseVO<BoardVO>(board, pageNo, bd.getBoard(map), bd.getTotalCount(map), size, parserPage);
 	}
 
-	public BoardVO getPost(BoardVO post) {
-		return bd.getPost(post);
+	public BoardVO getPost(int postNo) {
+		return bd.getPost(postNo);
 	}
 	
 	@Transactional
@@ -35,21 +36,21 @@ public class BoardService {
 	}
 	
 	@Transactional
-	public int updatePost(BoardVO post) {
+	public int updatePost(@Valid PostForm post) {
 		return bd.updatePost(post);
 	}
 	
 	@Transactional
-	public int deletePost(BoardVO post) {
+	public int deletePost(@Valid PostForm post) {
 		return bd.deletePost(post);
 	}
 
-	public String getPassword(BoardVO post) {
+	public String getPassword(@Valid PostForm post) {
 		return bd.getPassword(post);
 	}
 	
 	@Transactional
-	public int registerPost(BoardVO post) {
+	public int registerPost(@Valid RegisterForm post) {
 		return bd.registerPost(post);
 	}
 

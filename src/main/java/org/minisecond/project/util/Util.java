@@ -14,5 +14,19 @@ public class Util {
 		} catch (Exception e) {}
 		return defaultValue;
 	}	
+	
+	public static int parseInt(String str, String errMsg) throws Exception {
+		try {
+			if (str != null && str.length() != 0) {
+				return Integer.parseInt(str);
+			}
+		} catch (Exception e) {
+			throw new Exception(errMsg);
+		}
+		throw new Exception(errMsg); 
+	}
+
+
+
 
 }

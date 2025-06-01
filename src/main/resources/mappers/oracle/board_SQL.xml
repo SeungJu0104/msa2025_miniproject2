@@ -59,7 +59,7 @@
 		FROM
 			<include refid="join"/>
 		WHERE
-			<include refid="search"/> AND <include refid="field2"/>
+			UPPER(P.DELETEYN) = 'N' AND UPPER(M.DELETEYN) = 'N' AND <include refid="field2"/>
 	</select>
 	
 	<select id="getPassword" resultType="String">
